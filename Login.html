@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Traumatize.cc Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    /* Full-screen canvas for particles */
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    /* Wrapper centers both the glowing text and login container */
+    .wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 1;
+    }
+    /* Glowing header text */
+    .glow-text {
+      font-size: 60px;
+      font-weight: bold;
+      color: rgba(255, 0, 0, 0.8);
+      animation: glow 2s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+    @keyframes glow {
+      0%, 100% {
+        text-shadow: 0 0 5px rgba(255, 0, 0, 0.7), 0 0 10px rgba(255, 0, 0, 0.7), 0 0 15px rgba(255, 0, 0, 0.7);
+      }
+      50% {
+        text-shadow: 0 0 20px rgba(255, 0, 0, 1), 0 0 30px rgba(255, 0, 0, 1), 0 0 40px rgba(255, 0, 0, 1);
+      }
+    }
+    .container {
+      background: rgba(17, 17, 17, 0.7); /* Semi-transparent background */
+      padding: 30px;
+      border-radius: 10px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);
+      margin: 0 auto;
+    }
+    .logo {
+      width: 80px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+    .input-group {
+      text-align: left;
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      background: #222;
+      border: none;
+      border-radius: 5px;
+      color: white;
+    }
+    .button {
+      background-color: #222;
+      color: white;
+      padding: 12px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      border-radius: 5px;
+      font-weight: bold;
+      position: relative;
+      overflow: hidden;
+    }
+    .button::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: red;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      transition: width 0.3s ease-in-out;
+    }
+    .button:hover::after {
+      width: 100%;
+    }
+    .button:hover {
+      color: red;
+    }
+    .toggle {
+      margin-top: 15px;
+      cursor: pointer;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particleCanvas"></canvas>
+  
+  <div class="wrapper">
+    <div class="glow-text">Traumatize.cc</div>
+    <div class="container">
+      <!-- Removed the h2 element for "Login" -->
+      <form id="loginForm">
+        <div class="input-group">
+          <label>👤 Username</label>
+          <input type="text" placeholder="Enter Username" required />
+        </div>
+        <div class="input-group">
+          <label>🔒 Password</label>
+          <input type="password" placeholder="Enter Password" required />
+        </div>
+        <button class="button" type="submit">Continue ➜</button>
+      </form>
+      
+      <form id="registerForm" style="display: none;">
+        <div class="input-group">
+          <label>👤 Username</label>
+          <input type="text" placeholder="Enter Username" required />
+        </div>
+        <div class="input-group">
+          <label>📧 Email</label>
+          <input type="email" placeholder="Enter Email" required />
+        </div>
+        <div class="input-group">
+          <label>🔒 Password</label>
+          <input type="password" placeholder="Enter Password" required />
+        </div>
+        <button class="button" type="submit">Register ➜</button>
+      </form>
+      
+      <p class="toggle" onclick="toggleForm()">Don't Have An Account? Register Now</p>
+    </div>
+  </div>
+  
+  <script>
+    /* Particle Animation */
+    const canvas = document.getElementById("particleCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Set canvas size to fill window
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    const particles = [];
+    const particleCount = 100; // Adjust number of particles
+
+    // Create particles with random positions, radii, and speeds
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 3 + 2, // 2 to 5
+        speed: Math.random() * 1 + 0.5 // 0.5 to 1.5
+      });
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.y += p.speed;
+        // Reset particle to top if it goes off the bottom
+        if (p.y - p.radius > canvas.height) {
+          p.y = -p.radius;
+          p.x = Math.random() * canvas.width;
+        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "red";
+        ctx.fill();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    /* Form Toggle Functionality */
+    function toggleForm() {
+      let loginForm = document.getElementById("loginForm");
+      let registerForm = document.getElementById("registerForm");
+      let formTitle = document.getElementById("formTitle");
+      let toggleText = document.querySelector(".toggle");
+
+      if (loginForm.style.display === "none") {
+        loginForm.style.display = "block";
+        registerForm.style.display = "none";
+        formTitle.innerText = "Login";
+        toggleText.innerText = "Don't Have An Account? Register Now";
+      } else {
+        loginForm.style.display = "none";
+        registerForm.style.display = "block";
+        formTitle.innerText = "Register";
+        toggleText.innerText = "Already Have An Account? Login Now";
+      }
+    }
+  </script>
+</body>
+</html>
